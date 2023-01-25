@@ -1,3 +1,4 @@
+import { ValidationError } from "sequelize";
 import { Todos } from "../db/db.js";
 
 export async function getTodos( req, res ) {
@@ -11,6 +12,11 @@ export async function postTodo(req, res) {
         const result = await Todos.create({value, status, deadline, priority});
         res.send(result);
     } catch (err) {
-        res.status(500).send(err.message);
+        console.log(err);
+        if (err instanceof ValidationError) {
+            res.status(400).send(err.message);
+        } else {
+            res.status(500).send(err.message);
+        }
     }
 }
