@@ -19,6 +19,9 @@ export const Todos = sequelize.define("Todos", {
         type: DataTypes.ENUM,
         values: ['pending', 'done', 'overdue'],
         defaultValue: 'pending',
+        validate: {
+            isIn: [['pending', 'done', 'overdue']]
+        }
     },
     deadline: {
         type: DataTypes.DATE,
@@ -28,6 +31,9 @@ export const Todos = sequelize.define("Todos", {
         type: DataTypes.ENUM,
         values: ['high', 'average', 'low'],
         defaultValue: 'average',
+        validate: {
+            isIn: [['high', 'average', 'low']]
+        }
     }
 });
 
