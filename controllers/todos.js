@@ -14,3 +14,16 @@ export async function postTodo(req, res) {
         res.status(500).send(err.message);
     }
 }
+
+// will update value of a Todo 
+export async function updateTodo(req, res) {
+    try {
+        const { id } = req.params
+        const { valueUpdate } = req.body
+        const update = await Todos.update({ value: valueUpdate}, { where: {id: id}})
+        res.send(update)
+    } catch (err) {
+        res.status(500).send(err.message)
+    }
+}
+
