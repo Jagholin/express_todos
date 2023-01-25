@@ -1,4 +1,7 @@
 import { Sequelize, DataTypes } from 'sequelize';
+import pg from 'pg';
+const { PoolClient } = pg;
+import pgipc from 'pg-ipc';
 
 // Option 1: Passing a connection URI
 const sequelize = new Sequelize("postgres://druwjncc:8TuG_qrtWO8XwPgQoG5VZ4opq93ZnuQI@hattie.db.elephantsql.com/druwjncc") // Example for postgres
@@ -32,5 +35,22 @@ export const Todos = sequelize.define("Todos", {
 });
 
 await Todos.sync();
+const cl = await sequelize.connectionManager.getConnection();
+
+const ipc = pgipc(cl);
+
+ipc.on("error", (err) => {
+    console.log(err);
+})
+
+ipc.on("end", () => {
+    console.log("this is the end");
+    cl.end();
+})
+
+ipc.on("testchannel", (msg) => {
+    // console.log(msg);
+    console.log(`User #${msg.processId} says: ${JSON.stringify(msg.payload)}`);
+});
 
 export default sequelize;
