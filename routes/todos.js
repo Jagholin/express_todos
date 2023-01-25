@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getTodos, postTodo, updateTodo} from "../controllers/todos.js";
+import { getTodos, postTodo, updateTodo, deleteTodo} from "../controllers/todos.js";
 
 const router = Router();
 
@@ -7,7 +7,7 @@ const router = Router();
 router.get("/", getTodos);
 router.post("/", postTodo);
 router.put('/:id', updateTodo);
-//router.delete('/:id', deleteTodo);
+router.delete('/:id', deleteTodo);
 //router.get('/:id', getSingleTodo);
 
 // put - to change a single todo
