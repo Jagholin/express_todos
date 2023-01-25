@@ -1,7 +1,7 @@
 import { Sequelize, DataTypes } from 'sequelize';
 
 // Option 1: Passing a connection URI
-const sequelize = new Sequelize("postgres://druwjncc:8TuG_qrtWO8XwPgQoG5VZ4opq93ZnuQI@hattie.db.elephantsql.com/druwjncc") // Example for postgres
+const sequelize = new Sequelize(process.env.CONNECTION_STRING) // Example for postgres
 
 try {
     await sequelize.authenticate();
