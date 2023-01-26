@@ -6,40 +6,40 @@ export async function getTodos( req, res ) {
     res.send(todos);
 }
 
-export async function postTodo(req, res) {
+export async function postTodo(req, res, next) {
     try {
         const { value, status, deadline, priority } = req.body;
         const result = await Todos.create({value, status, deadline, priority});
         res.send(result);
     } catch (err) {
-        console.log(err);
-        if (err instanceof ValidationError) {
-            res.status(400).send(err.message);
-        } else {
-            res.status(500).send(err.message);
-        }
+        next(err);
     }
 }
 
 // will update value of a Todo 
-export async function updateTodo(req, res) {
+export async function updateTodo(req, res, next) {
     try {
         const { id } = req.params
         const { value, status, deadline, priority } = req.body
-        const update = await Todos.update({ value: value, status: status, deadline: deadline, priority: priority}, { where: {id: id}})
-        res.send(update)
+        const [rowCount, changedElements] = await Todos.update({ 
+            value: value, 
+            status: status, 
+            deadline: deadline, 
+            priority: priority
+        }, { where: {id: id}, returning: true});
+        res.send(changedElements)
     } catch (err) {
-        res.status(500).send(err.message)
+        next(err);
     }
 }
 
 // will delete todo
-export async function deleteTodo(req, res) {
+export async function deleteTodo(req, res, next) {
     try {
         const { id } = req.params
         const remove = await Todos.destroy({ where: {id: id}})
         res.send(`Deleted row ${remove}`)
     } catch (err) {
-        res.status(500).send(err.message)
+        next(err);
     }
 }
