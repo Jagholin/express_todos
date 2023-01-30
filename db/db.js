@@ -37,7 +37,7 @@ export const Todos = sequelize.define("Todos", {
     }
 });
 
-await sequelize.query(`UPDATE "Todos" SET status='overdue' WHERE now()>deadline;`);
+await sequelize.query(`UPDATE "Todos" SET status='overdue' WHERE now()>deadline AND status='pending';`);
 await Todos.sync();
 
 export default sequelize;
