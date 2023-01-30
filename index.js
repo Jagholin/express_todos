@@ -5,6 +5,7 @@ import sql from "./db/db.js";
 import cors from "cors";
 
 import todosRouter from "./routes/todos.js";
+import { ValidationError } from "sequelize";
 
 const app = express();
 app.use(cors());
@@ -15,6 +16,14 @@ app.use("/todos", todosRouter);
 
 app.use((req, res) => {
     res.status(404).send("This page doesn't exist");
+})
+
+app.use((err, req, res, next) => {
+    if (err instanceof ValidationError) {
+        res.status(400).send(err.message);
+    } else {
+        res.status(500).send(err.message);
+    }
 })
 
 app.listen(PORT, () => {
